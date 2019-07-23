@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Home">
+
+    <RelativeLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textColor="#000"
+            android:id="@+id/usernamee"
+            android:text="GREVIANCE"
+            android:layout_margin="5sp"
+            android:textAlignment="center"
+            android:textSize="28sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:padding="20dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/reg"
+                android:layout_width="80dp"
+                android:layout_height="180dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="154dp"
+                android:layout_marginLeft="154dp"
+                android:layout_marginEnd="146dp"
+                android:layout_marginRight="146dp"
+                android:padding="1dp"
+                android:src="@drawable/feedback" />
+            <TextView
+                android:layout_marginTop="18sp"
+                android:id="@+id/source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:text="Complaint Register"
+                android:textColor="#000" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:padding="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/bt"
+                android:layout_width="80dp"
+                android:layout_height="180dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="154dp"
+                android:layout_marginLeft="154dp"
+                android:layout_marginEnd="146dp"
+                android:layout_marginRight="146dp"
+                android:padding="1dp"
+                android:src="@drawable/feedback" />
+
+            <ImageView
+                android:layout_width="96dp"
+                android:layout_height="157dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="160dp"
+                android:layout_marginLeft="160dp"
+                android:layout_marginEnd="123dp"
+                android:layout_marginRight="123dp"
+                android:layout_marginBottom="38dp"
+                android:padding="20dp"
+                android:src="@drawable/checked" />
+
+            <TextView
+                android:id="@+id/dest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18sp"
+                android:background="#fff"
+                android:text="Check status"
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/logout"
+        android:text="logout"
+        android:textSize="24sp"
+        android:background="@drawable/button"
+        android:textColor="#fff"
+        android:layout_marginBottom="20dp"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
