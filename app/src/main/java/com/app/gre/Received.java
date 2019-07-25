@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class Received extends AppCompatActivity {
 
     DatabaseReference data;
-    SendNotifications notify;
+    Viewreplies notify;
     ListView listView;
     public ArrayList<String> feed = new ArrayList<>();
 
@@ -37,30 +37,31 @@ public class Received extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_received);
 
-        notify = new SendNotifications();
+        notify = new Viewreplies();
         //data = FirebaseDatabase.getInstance().getReference().child("SendNotifications");
 
         listView = findViewById(R.id.clist);
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference usersdRef = rootRef.child("SendNotifications");
+        final DatabaseReference usersdRef = rootRef.child("Viewreplies");
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String cid = ds.child("comid").getValue(String.class);
+                    final Integer cid = ds.child("comid").getValue(int.class);
                     String un = ds.child("category").getValue(String.class);
                     String em = ds.child("prblm").getValue(String.class);
                     String mno = ds.child("status").getValue(String.class);
                     String dp = ds.child("descp").getValue(String.class);
+                    String dt = ds.child("date").getValue(String.class);
                     String msg = ds.child("message").getValue(String.class);
 
-                    Log.d("TAG",cid);
+                    Log.d("TAG", String.valueOf(cid));
                     Log.d("TAG", un);
                     Log.d("TAG", em);
                     Log.d("TAG", mno);
                     Log.d("TAG", dp);
 
-                    feed.add("\n"+"Complaint ID :"+ cid +"\n"+"Category :" +un +"\n"+"Problem :" +em +"\n"+"Status :" +mno +"\n"+ "Description :" +dp +"\n"+ "Reply :"+msg+"\n");
+                    feed.add("\n"+dt+"\n\n"+"Complaint ID : "+ cid +"\n"+"Category : " +un +"\n"+"Problem : " +em +"\n"+"Status : " +mno +"\n"+ "Description : " +dp +"\n"+ "Reply : "+msg+"\n");
                     //feed.add("REPLY");
 
                 }

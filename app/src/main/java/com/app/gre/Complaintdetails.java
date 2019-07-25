@@ -1,16 +1,27 @@
 package com.app.gre;
 
+import android.support.design.widget.TextInputEditText;
+
 public class Complaintdetails {
-    String category,problem,mno,descp,complaintid;
+    int complaintid;
+    String category,problem,mno,descp,datetym;
 
     public Complaintdetails() {
     }
 
-    public String getComplaintid() {
+    public String getDatetym() {
+        return datetym;
+    }
+
+    public void setDatetym(String datetym) {
+        this.datetym = datetym;
+    }
+
+    public int getComplaintid() {
         return complaintid;
     }
 
-    public void setComplaintid(String complaintid) {
+    public void setComplaintid(int complaintid) {
         this.complaintid = complaintid;
     }
 

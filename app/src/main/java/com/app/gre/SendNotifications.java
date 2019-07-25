@@ -1,9 +1,18 @@
 package com.app.gre;
 
 public class SendNotifications {
-    String message,comid,category,prblm,status,descp;
+    int comid;
+    String message,category,prblm,status,descp;
 
     public SendNotifications() {
+    }
+
+    public int getComid() {
+        return comid;
+    }
+
+    public void setComid(int comid) {
+        this.comid = comid;
     }
 
     public String getDescp() {
@@ -22,10 +31,6 @@ public class SendNotifications {
         this.status = status;
     }
 
-    public String getComid() {
-        return comid;
-    }
-
     public String getCategory() {
         return category;
     }
@@ -40,10 +45,6 @@ public class SendNotifications {
 
     public void setPrblm(String prblm) {
         this.prblm = prblm;
-    }
-
-    public void setComid(String comid) {
-        this.comid = comid;
     }
 
     public String getMessage() {

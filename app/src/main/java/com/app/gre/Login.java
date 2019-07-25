@@ -56,6 +56,7 @@ public class Login extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+                                    finish();
                                     Intent intent = new Intent(Login.this, Home.class);
                                     Toast.makeText(Login.this, "Successfully Logged in", Toast.LENGTH_LONG).show();
                                     startActivity(intent);
@@ -69,6 +70,7 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
+
         signupoption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,5 +78,14 @@ public class Login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mauth.getCurrentUser() != null){
+            finish();
+            startActivity(new Intent(this,Home.class));
+        }
     }
 }

@@ -65,16 +65,17 @@ public class Register extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+                                    finish();
                                     members.setMail(mailid);
                                     members.setUserid(unm);
-                                    members.setPass(pwd);
+                                    //members.setPass(pwd);
                                     members.setPhn(mobile);
 
-                                    reff.child(unm).setValue(members);
+                                    reff.push().setValue(members);
                                     Toast.makeText(Register.this, "Registration done Successfully !!", Toast.LENGTH_LONG).show();
 
-                                    Intent intent = new Intent(Register.this, Login.class);
-                                    startActivity(intent);
+                                    //Intent intent = new Intent(Register.this, Login.class);
+                                    //startActivity(intent);
 
                                 } else {
                                     Toast.makeText(Register.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();

@@ -1,5 +1,7 @@
 package com.app.gre;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,21 +25,23 @@ public class Check_status extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_status);
+        SharedPreferences share = getSharedPreferences("userinfo", Context.MODE_PRIVATE);
+        final String phnumber = share.getString("phnumber","");
 
         final ListView listView = (ListView)findViewById(R.id.notify);
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference usersdRef = rootRef.child("SendNotifications");
+        DatabaseReference usersdRef = rootRef.child("SendNotifications").child(phnumber);
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String cid = ds.child("comid").getValue(String.class).trim();
+                    final Integer cid = ds.child("comid").getValue(int.class);
                     String cat = ds.child("category").getValue(String.class).trim();
                     String prblm = ds.child("prblm").getValue(String.class).trim();
                     String un = ds.child("message").getValue(String.class).trim();
                     String sta = ds.child("status").getValue(String.class).trim();
 
-                    Log.d("TAG", cid);
+                    Log.d("TAG", String.valueOf(cid));
                     Log.d("TAG", cat);
                     Log.d("TAG", prblm);
                     Log.d("TAG", un);

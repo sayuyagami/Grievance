@@ -1,10 +1,10 @@
 package com.app.gre;
 
-public class Invalid {
+public class Viewreplies {
     int comid;
-    String message,category,prblm,status,descrip,date,mno;
+    String message,category,prblm,status,descp,date,mno;
 
-    public Invalid() {
+    public Viewreplies() {
     }
 
     public String getMno() {
@@ -31,12 +31,12 @@ public class Invalid {
         this.comid = comid;
     }
 
-    public String getDescrip() {
-        return descrip;
+    public String getDescp() {
+        return descp;
     }
 
-    public void setDescrip(String descrip) {
-        this.descrip = descrip;
+    public void setDescp(String descp) {
+        this.descp = descp;
     }
 
     public String getStatus() {
@@ -71,4 +71,3 @@ public class Invalid {
         this.message = message;
     }
 }
-

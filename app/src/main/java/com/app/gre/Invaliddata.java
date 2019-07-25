@@ -25,8 +25,9 @@ public class Invaliddata extends AppCompatActivity {
 
     boolean checked = false;
     String[] listitems;
-    DatabaseReference data;
+    DatabaseReference data,viewadmin;
     SendNotifications notify;
+    Viewreplies replies;
     String m_Text;
     ListView listView;
     public ArrayList<String> feed = new ArrayList<>();
@@ -38,6 +39,8 @@ public class Invaliddata extends AppCompatActivity {
 
         notify = new SendNotifications();
         data = FirebaseDatabase.getInstance().getReference().child("SendNotifications");
+        viewadmin = FirebaseDatabase.getInstance().getReference().child("Viewreplies");
+        replies = new Viewreplies();
 
         listView = findViewById(R.id.clist);
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -46,13 +49,14 @@ public class Invaliddata extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String cid = ds.child("comid").getValue(String.class);
+                    final Integer cid = ds.child("comid").getValue(int.class);
+                    String dt = ds.child("date").getValue(String.class);
                     String un = ds.child("category").getValue(String.class);
                     String em = ds.child("prblm").getValue(String.class);
                     String dp = ds.child("descrip").getValue(String.class);
                     String msg = ds.child("message").getValue(String.class);
 
-                    Log.d("TAG",cid);
+                    Log.d("TAG", String.valueOf(cid));
                     Log.d("TAG", un);
                     Log.d("TAG", em);
 
@@ -90,11 +94,14 @@ public class Invaliddata extends AppCompatActivity {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                                final String cid = ds.child("comid").getValue(String.class);
+                                                final Integer cid = ds.child("comid").getValue(int.class);
                                                 final String un = ds.child("category").getValue(String.class);
+                                                final String dt = ds.child("date").getValue(String.class);
                                                 final String em = ds.child("prblm").getValue(String.class);
                                                 final String dp = ds.child("descrip").getValue(String.class);
                                                 final String msg = ds.child("message").getValue(String.class);
+                                                final String phn = ds.child("mno").getValue(String.class);
+
                                                 //final String sta = ds.child("status").getValue(String.class);
 
                                                 //final Button replybtn = feed.get(position);
@@ -106,7 +113,6 @@ public class Invaliddata extends AppCompatActivity {
                                                 builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int listposition) {
-                                                        String compid = listPosition;
 
                                                         notify.setComid(cid);
                                                         notify.setCategory(un);
@@ -115,7 +121,16 @@ public class Invaliddata extends AppCompatActivity {
                                                         notify.setStatus("Request Rejected");
                                                         notify.setMessage("Invalid Complaint");
 
-                                                        data.child(cid).setValue(notify);
+                                                        replies.setComid(cid);
+                                                        replies.setCategory(un);
+                                                        replies.setPrblm(em);
+                                                        replies.setDescp(dp);
+                                                        replies.setDate(dt);
+                                                        replies.setStatus("Request Rejected");
+                                                        replies.setMessage("Invalid Complaint");
+
+                                                        viewadmin.child(String.valueOf(cid)).setValue(replies);
+                                                        data.child(phn).child(String.valueOf(cid)).setValue(notify);
                                                         Toast.makeText(Invaliddata.this, "Reply Sent Successfully", Toast.LENGTH_LONG).show();
                                                     }
                                                 });
@@ -150,11 +165,12 @@ public class Invaliddata extends AppCompatActivity {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                            final String cid = ds.child("comid").getValue(String.class);
+                                            final Integer cid = ds.child("comid").getValue(int.class);
                                             final String un = ds.child("category").getValue(String.class);
+                                            final String dt = ds.child("date").getValue(String.class);
                                             final String em = ds.child("prblm").getValue(String.class);
                                             final String dp = ds.child("descrip").getValue(String.class);
-                                            final String msg = ds.child("message").getValue(String.class);
+                                            final String phn = ds.child("mno").getValue(String.class);
 
                                             final String set = "Request accepted";
 
@@ -184,7 +200,16 @@ public class Invaliddata extends AppCompatActivity {
                                                     notify.setDescp(dp);
                                                     notify.setMessage(m_Text);
 
-                                                    data.child(cid).setValue(notify);
+                                                    replies.setComid(cid);
+                                                    replies.setCategory(un);
+                                                    replies.setPrblm(em);
+                                                    replies.setDescp(dp);
+                                                    replies.setDate(dt);
+                                                    replies.setStatus(set);
+                                                    replies.setMessage(m_Text);
+
+                                                    viewadmin.child(String.valueOf(cid)).setValue(replies);
+                                                    data.child(phn).child(String.valueOf(cid)).setValue(notify);
                                                     Toast.makeText(Invaliddata.this, "Reply Sent Successfully", Toast.LENGTH_LONG).show();
                                                 }
                                             });

@@ -1,51 +1,30 @@
 package com.app.gre;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.ClipData;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.MimeTypeMap;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Switch;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
 import in.galaxyofandroid.spinerdialog.SpinnerDialog;
@@ -54,26 +33,30 @@ import static java.lang.Integer.parseInt;
 
 public class Complaints extends AppCompatActivity {
 
-    EditText complaintid;
-    SpinnerDialog categoryspinnerDialog,prblmspinnerDialog;
-    TextInputEditText userno,descp;
-    Button complaintsubmit,category,problem;
+    TextView complaintid,userno;
+    EditText descp;
+    SpinnerDialog categoryspinnerDialog, prblmspinnerDialog;
+    Button complaintsubmit, category, problem;
 
-    DatabaseReference reff,creff;
+    DatabaseReference reff, creff,viewadmin;
 
     Complaintdetails details;
     SendNotifications data;
+    Viewreplies replies;
 
     public ArrayList<String> msg = new ArrayList<>();
 
     ArrayList<String> type1 = new ArrayList<>();
     ArrayList<String> type2 = new ArrayList<>();
     ArrayList<String> type3 = new ArrayList<>();
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complaints);
+
+        viewadmin = FirebaseDatabase.getInstance().getReference().child("Viewreplies");
+        replies = new Viewreplies();
 
         details = new Complaintdetails();
         complaintid = findViewById(R.id.complaintid);
@@ -82,7 +65,13 @@ public class Complaints extends AppCompatActivity {
         userno = findViewById(R.id.userno);
         descp = findViewById(R.id.descp);
         complaintsubmit = (Button) findViewById(R.id.complaintsubmit);
-        //location = (RadioButton)findViewById(R.id.location);
+        complaintid.setText(gp());
+
+        //current user mobile number retrieved
+        SharedPreferences share = getSharedPreferences("userinfo", Context.MODE_PRIVATE);
+        final String phnumber = share.getString("phnumber","");
+
+        userno.setText(phnumber);
 
         category.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,18 +153,21 @@ public class Complaints extends AppCompatActivity {
         complaintsubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String cid = complaintid.getText().toString().trim();
+                final int cid = Integer.parseInt(complaintid.getText().toString().trim());
                 String cat = category.getText().toString().trim();
                 String prblm = problem.getText().toString().trim();
-                String uno = userno.getText().toString().trim();
                 String dcp = descp.getText().toString().trim();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                Date date = new Date();
+                String dt = dateFormat.format(date);
 
                 try {
-                    if (!cid.isEmpty() && !cat.isEmpty() && !prblm.isEmpty() && !uno.isEmpty() && !dcp.isEmpty()) {
+                    if (!cat.isEmpty() && !prblm.isEmpty() && !dcp.isEmpty()) {
                         details.setComplaintid(cid);
                         details.setCategory(cat);
                         details.setProblem(prblm);
-                        details.setMno(uno);
+                        details.setDatetym(dt);
+                        details.setMno(phnumber);
                         details.setDescp(dcp);
 
                         data.setComid(cid);
@@ -185,13 +177,22 @@ public class Complaints extends AppCompatActivity {
                         data.setMessage("in process");
                         data.setStatus("Wait for reply");
 
-                        reff.child(cid).setValue(details);
-                        creff.child(cid).setValue(data);
-                        Toast.makeText(Complaints.this,"Complaint Submitted",Toast.LENGTH_LONG).show();
-                        complaintid.setText("");
+                        replies.setComid(cid);
+                        replies.setCategory(cat);
+                        replies.setPrblm(prblm);
+                        replies.setDescp(dcp);
+                        replies.setDate(dt);
+                        replies.setMno(phnumber);
+                        replies.setStatus("Wait for reply");
+                        replies.setMessage("in process");
+
+                        viewadmin.child(String.valueOf(cid)).setValue(replies);
+                        reff.child(String.valueOf(cid)).setValue(details);
+                        creff.child(phnumber).child(String.valueOf(cid)).setValue(data);
+                        Toast.makeText(Complaints.this, "Complaint Submitted", Toast.LENGTH_LONG).show();
+                        complaintid.setText(gp());
                         category.setText("SELECT CATEGORY");
                         problem.setText("SELECT PROBLEM TYPE");
-                        userno.setText("");
                         descp.setText("");
                     }
                 } catch (NullPointerException e) {
@@ -201,6 +202,11 @@ public class Complaints extends AppCompatActivity {
         });
     }
 
+    public String gp() {
+        int rp = (int)(Math.random()*9000)+1000;
+        final String rrp = String.valueOf(rp);
+        return rrp;
+    }
 
     //actionbar menu
     @Override

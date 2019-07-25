@@ -15,7 +15,6 @@
         <TextView
             android:textColor="#000"
             android:id="@+id/usernamee"
-            android:text="GRIEVANCE"
             android:layout_margin="5sp"
             android:textAlignment="center"
             android:textSize="28sp"

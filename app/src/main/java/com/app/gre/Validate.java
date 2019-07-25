@@ -25,7 +25,8 @@ import java.util.ArrayList;
 public class Validate extends AppCompatActivity {
 
     boolean checked = false;
-    DatabaseReference data;
+    DatabaseReference data,viewadmin;
+    Viewreplies replies;
     SendNotifications notify;
     String[] listitems;
     ListView listView;
@@ -39,6 +40,8 @@ public class Validate extends AppCompatActivity {
 
         notify = new SendNotifications();
         data = FirebaseDatabase.getInstance().getReference().child("SendNotifications");
+        viewadmin = FirebaseDatabase.getInstance().getReference().child("Viewreplies");
+        replies = new Viewreplies();
 
         listView = findViewById(R.id.clist);
         final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -47,19 +50,20 @@ public class Validate extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String cid = ds.child("complaintid").getValue(String.class);
+                    final Integer cid = ds.child("complaintid").getValue(int.class);
                     String un = ds.child("category").getValue(String.class);
+                    String dt = ds.child("datetym").getValue(String.class);
                     String em = ds.child("problem").getValue(String.class);
                     String mno = ds.child("mno").getValue(String.class);
                     String dp = ds.child("descp").getValue(String.class);
 
-                    Log.d("TAG",cid);
+                    Log.d("TAG", String.valueOf(cid));
                     Log.d("TAG", un);
                     Log.d("TAG", em);
                     Log.d("TAG", mno);
                     Log.d("TAG", dp);
 
-                    feed.add("\n"+"Complaint ID :"+ cid +"\n"+"Category :" +un +"\n"+"Problem :" +em +"\n"+"Mobile no :" +mno +"\n"+ "Description :" +dp +"\n"+ "");
+                    feed.add("\n"+dt+"\n\n"+"Complaint ID :"+ cid +"\n"+"Category :" +un +"\n"+"Problem :" +em +"\n"+"Mobile no :" +mno +"\n"+ "Description :" +dp +"\n"+ "");
                     feed.add("REPLY");
 
                 }
@@ -95,10 +99,12 @@ public class Validate extends AppCompatActivity {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                                final String cid = ds.child("complaintid").getValue(String.class);
+                                                final Integer cid = ds.child("complaintid").getValue(int.class);
                                                 final String un = ds.child("category").getValue(String.class);
                                                 final String em = ds.child("problem").getValue(String.class);
+                                                final String dt = ds.child("datetym").getValue(String.class);
                                                 final String dcp = ds.child("descp").getValue(String.class);
+                                                final String phn = ds.child("mno").getValue(String.class);
 
                                                 //final Button replybtn = feed.get(position);
                                                 final AlertDialog.Builder builder = new AlertDialog.Builder(Validate.this);
@@ -117,7 +123,7 @@ public class Validate extends AppCompatActivity {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int listposition) {
                                                         m_Text = input.getText().toString().trim();
-                                                        String compid = listPosition;
+                                                        //String compid = listPosition;
 
                                                         notify.setComid(cid);
                                                         notify.setCategory(un);
@@ -126,7 +132,17 @@ public class Validate extends AppCompatActivity {
                                                         notify.setStatus("Request accepted");
                                                         notify.setMessage(m_Text);
 
-                                                        data.child(cid).setValue(notify);
+                                                        replies.setComid(cid);
+                                                        replies.setCategory(un);
+                                                        replies.setPrblm(em);
+                                                        replies.setDescp(dcp);
+                                                        replies.setDate(dt);
+                                                        replies.setMno(phn);
+                                                        replies.setStatus("Request accepted");
+                                                        replies.setMessage(m_Text);
+
+                                                        data.child(phn).child(String.valueOf(cid)).setValue(notify);
+                                                        viewadmin.child(String.valueOf(cid)).setValue(replies);
                                                         Toast.makeText(Validate.this, "Reply Sent Successfully", Toast.LENGTH_LONG).show();
                                                     }
                                                 });
@@ -161,10 +177,11 @@ public class Validate extends AppCompatActivity {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                            final String cid = ds.child("complaintid").getValue(String.class);
+                                            final Integer cid = ds.child("complaintid").getValue(int.class);
                                             final String un = ds.child("category").getValue(String.class);
                                             final String em = ds.child("problem").getValue(String.class);
                                             final String desp = ds.child("descp").getValue(String.class);
+                                            final String phn = ds.child("mno").getValue(String.class);
 
                                             final String set = "Invalid";
 
@@ -184,8 +201,9 @@ public class Validate extends AppCompatActivity {
                                                     invinfo.setPrblm(em);
                                                     invinfo.setDescrip(desp);
                                                     invinfo.setMessage(set);
+                                                    invinfo.setMno(phn);
 
-                                                    dreff.child(cid).setValue(invinfo);
+                                                    dreff.child(String.valueOf(cid)).setValue(invinfo);
                                                     Toast.makeText(Validate.this, "Reply Sent Successfully", Toast.LENGTH_LONG).show();
                                                 }
                                             });
