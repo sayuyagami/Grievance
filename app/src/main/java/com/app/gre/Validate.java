@@ -182,6 +182,7 @@ public class Validate extends AppCompatActivity {
                                             final String em = ds.child("problem").getValue(String.class);
                                             final String desp = ds.child("descp").getValue(String.class);
                                             final String phn = ds.child("mno").getValue(String.class);
+                                            final String dt = ds.child("datetym").getValue(String.class);
 
                                             final String set = "Invalid";
 
@@ -201,6 +202,7 @@ public class Validate extends AppCompatActivity {
                                                     invinfo.setPrblm(em);
                                                     invinfo.setDescrip(desp);
                                                     invinfo.setMessage(set);
+                                                    invinfo.setDate(dt);
                                                     invinfo.setMno(phn);
 
                                                     dreff.child(String.valueOf(cid)).setValue(invinfo);
