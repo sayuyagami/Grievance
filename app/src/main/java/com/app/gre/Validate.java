@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class Validate extends AppCompatActivity {
 
     boolean checked = false;
-    DatabaseReference data,viewadmin;
+    DatabaseReference data,viewadmin,userRef;
     Viewreplies replies;
     SendNotifications notify;
     String[] listitems;
@@ -45,7 +45,7 @@ public class Validate extends AppCompatActivity {
 
         listView = findViewById(R.id.clist);
         final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference usersdRef = rootRef.child("Complaintdetails");
+        userRef = rootRef.child("Complaintdetails");
         final ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -63,6 +63,7 @@ public class Validate extends AppCompatActivity {
                     Log.d("TAG", mno);
                     Log.d("TAG", dp);
 
+                    int store = cid;
                     feed.add("\n"+dt+"\n\n"+"Complaint ID :"+ cid +"\n"+"Category :" +un +"\n"+"Problem :" +em +"\n"+"Mobile no :" +mno +"\n"+ "Description :" +dp +"\n"+ "");
                     feed.add("REPLY");
 
@@ -75,7 +76,7 @@ public class Validate extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         };
-        usersdRef.addListenerForSingleValueEvent(eventListener);
+        userRef.addListenerForSingleValueEvent(eventListener);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -94,7 +95,6 @@ public class Validate extends AppCompatActivity {
 
                                 Toast.makeText(Validate.this,"This is set to be valid",Toast.LENGTH_LONG).show();
                                 if (checked == true) {
-                                    DatabaseReference userRef = rootRef.child("Complaintdetails");
                                     ValueEventListener event = new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -144,6 +144,8 @@ public class Validate extends AppCompatActivity {
                                                         data.child(phn).child(String.valueOf(cid)).setValue(notify);
                                                         viewadmin.child(String.valueOf(cid)).setValue(replies);
                                                         Toast.makeText(Validate.this, "Reply Sent Successfully", Toast.LENGTH_LONG).show();
+                                                        userRef.child(String.valueOf(cid)).setValue(null);
+
                                                     }
                                                 });
                                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -207,6 +209,8 @@ public class Validate extends AppCompatActivity {
 
                                                     dreff.child(String.valueOf(cid)).setValue(invinfo);
                                                     Toast.makeText(Validate.this, "Reply Sent Successfully", Toast.LENGTH_LONG).show();
+                                                    userRef.child(String.valueOf(cid)).setValue(null);
+
                                                 }
                                             });
                                             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -227,7 +231,7 @@ public class Validate extends AppCompatActivity {
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
                                     }
-                                };usersdRef.addListenerForSingleValueEvent(event);
+                                };userRef.addListenerForSingleValueEvent(event);
                             }
                         }
                     });

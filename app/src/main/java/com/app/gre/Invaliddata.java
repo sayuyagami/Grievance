@@ -132,6 +132,7 @@ public class Invaliddata extends AppCompatActivity {
                                                         viewadmin.child(String.valueOf(cid)).setValue(replies);
                                                         data.child(phn).child(String.valueOf(cid)).setValue(notify);
                                                         Toast.makeText(Invaliddata.this, "Reply Sent Successfully", Toast.LENGTH_LONG).show();
+                                                        usersdRef.child(String.valueOf(cid)).setValue(null);
                                                     }
                                                 });
                                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -211,6 +212,8 @@ public class Invaliddata extends AppCompatActivity {
                                                     viewadmin.child(String.valueOf(cid)).setValue(replies);
                                                     data.child(phn).child(String.valueOf(cid)).setValue(notify);
                                                     Toast.makeText(Invaliddata.this, "Reply Sent Successfully", Toast.LENGTH_LONG).show();
+                                                    usersdRef.child(String.valueOf(cid)).setValue(null);
+
                                                 }
                                             });
                                             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
